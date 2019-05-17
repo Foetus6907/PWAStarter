@@ -15,7 +15,7 @@
     "bundlesize": "bundlesize"
   },
   "engines": {
-    "npm": ">=5.5.0",
+    "npm": ">=6.4.0",
     "node": ">=10.5.0"
   },
   "dependencies": {
