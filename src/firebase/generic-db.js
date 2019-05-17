@@ -1,13 +1,13 @@
-import isNil from 'lodash/isNil'
-import keys from 'lodash/keys'
-import cloneDeep from 'lodash/cloneDeep'
-import firebase from 'firebase/app'
+import isNil from "lodash/isNil";
+import keys from "lodash/keys";
+import cloneDeep from "lodash/cloneDeep";
+import firebase from "firebase/app";
 
-import firestore from './async-firestore'
+import firestore from "./async-firestore";
 
 export default class GenericDB {
   constructor(collectionPath) {
-    this.collectionPath = collectionPath
+    this.collectionPath = collectionPath;
   }
 
   /**
@@ -16,14 +16,14 @@ export default class GenericDB {
    * @param id
    */
   async create(data, id = null) {
-    const collectionRef = (await firestore()).collection(this.collectionPath)
-    const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp()
+    const collectionRef = (await firestore()).collection(this.collectionPath);
+    const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp();
 
     const dataToCreate = {
       ...data,
       createTimestamp: serverTimestamp,
       updateTimestamp: serverTimestamp
-    }
+    };
 
     const createPromise = isNil(id)
       ? // Create doc with generated id
@@ -32,16 +32,16 @@ export default class GenericDB {
         collectionRef
           .doc(id)
           .set(dataToCreate)
-          .then(() => id)
+          .then(() => id);
 
-    const docId = await createPromise
+    const docId = await createPromise;
 
     return {
       id: docId,
       ...data,
       createTimestamp: new Date(),
       updateTimestamp: new Date()
-    }
+    };
   }
 
   /**
@@ -52,14 +52,14 @@ export default class GenericDB {
     const result = await (await firestore())
       .collection(this.collectionPath)
       .doc(id)
-      .get()
+      .get();
 
-    const data = result.exists ? result.data() : null
+    const data = result.exists ? result.data() : null;
 
-    if (isNil(data)) return null
+    if (isNil(data)) return null;
 
-    this.convertObjectTimestampPropertiesToDate(data)
-    return { id, ...data }
+    this.convertObjectTimestampPropertiesToDate(data);
+    return { id, ...data };
   }
 
   /**
@@ -67,11 +67,11 @@ export default class GenericDB {
    * @param constraints
    */
   async readAll(constraints = null) {
-    const collectionRef = (await firestore()).collection(this.collectionPath)
-    let query = collectionRef
+    const collectionRef = (await firestore()).collection(this.collectionPath);
+    let query = collectionRef;
 
     if (constraints) {
-      constraints.forEach(constraint => (query = query.where(...constraint)))
+      constraints.forEach(constraint => (query = query.where(...constraint)));
     }
 
     const formatResult = result =>
@@ -80,9 +80,9 @@ export default class GenericDB {
           id: ref.id,
           ...ref.data()
         })
-      )
+      );
 
-    return query.get().then(formatResult)
+    return query.get().then(formatResult);
   }
 
   /**
@@ -90,9 +90,9 @@ export default class GenericDB {
    * @param data
    */
   async update(data) {
-    const id = data.id
-    const clonedData = cloneDeep(data)
-    delete clonedData.id
+    const id = data.id;
+    const clonedData = cloneDeep(data);
+    delete clonedData.id;
 
     await (await firestore())
       .collection(this.collectionPath)
@@ -100,9 +100,9 @@ export default class GenericDB {
       .update({
         ...clonedData,
         updateTimestamp: firebase.firestore.FieldValue.serverTimestamp()
-      })
+      });
 
-    return id
+    return id;
   }
 
   /**
@@ -113,7 +113,7 @@ export default class GenericDB {
     return (await firestore())
       .collection(this.collectionPath)
       .doc(id)
-      .delete()
+      .delete();
   }
 
   /**
@@ -127,7 +127,7 @@ export default class GenericDB {
         obj[prop] instanceof firebase.firestore.Timestamp
           ? (obj[prop] = obj[prop].toDate())
           : this.convertObjectTimestampPropertiesToDate(obj[prop])
-      )
-    return obj
+      );
+    return obj;
   }
 }

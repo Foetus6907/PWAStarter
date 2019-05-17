@@ -6,7 +6,7 @@
       class="delete-btn"
       @click="$emit('deleteProduct', data.id)"
     >
-      {{ isProductDeletionPending ? 'delete in progress...' : 'delete' }}
+      {{ isProductDeletionPending ? "delete in progress..." : "delete" }}
     </div>
   </div>
 </template>
@@ -19,11 +19,11 @@ export default {
     isProductDeletionPending: Boolean,
     disableActions: Boolean
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import '@/theme/variables.scss';
+@import "@/theme/variables.scss";
 
 .product-item {
   display: flex;

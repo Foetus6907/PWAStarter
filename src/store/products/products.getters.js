@@ -4,4 +4,4 @@ export default {
    */
   isProductDeletionPending: state => productId =>
     state.productDeletionPending.includes(productId)
-}
+};

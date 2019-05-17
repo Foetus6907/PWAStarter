@@ -24,48 +24,48 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import isNil from 'lodash/isNil'
-import firebase from 'firebase/app'
-import { desktop as isDekstop } from 'is_js'
+import { mapState, mapMutations } from "vuex";
+import isNil from "lodash/isNil";
+import firebase from "firebase/app";
+import { desktop as isDekstop } from "is_js";
 
 export default {
   data: () => ({ loginError: null }),
   head: {
     title: {
-      inner: 'Login'
+      inner: "Login"
     },
     meta: [
       {
-        name: 'description',
-        content: 'Sign in or sign up to bento-starter',
-        id: 'desc'
+        name: "description",
+        content: "Sign in or sign up to bento-starter",
+        id: "desc"
       }
     ]
   },
   computed: {
-    ...mapState('authentication', ['user']),
-    ...mapState('app', ['networkOnLine'])
+    ...mapState("authentication", ["user"]),
+    ...mapState("app", ["networkOnLine"])
   },
   watch: {
     user: {
       handler(user) {
         if (!isNil(user)) {
           const redirectUrl = isNil(this.$route.query.redirectUrl)
-            ? '/products'
-            : this.$route.query.redirectUrl
-          this.$router.push(redirectUrl)
+            ? "/products"
+            : this.$route.query.redirectUrl;
+          this.$router.push(redirectUrl);
         }
       },
       immediate: true
     }
   },
   methods: {
-    ...mapMutations('authentication', ['setUser']),
+    ...mapMutations("authentication", ["setUser"]),
     async login() {
-      this.loginError = null
-      const provider = new firebase.auth.GoogleAuthProvider()
-      this.setUser(undefined)
+      this.loginError = null;
+      const provider = new firebase.auth.GoogleAuthProvider();
+      this.setUser(undefined);
 
       try {
         // Firebase signin with popup is faster than redirect
@@ -73,18 +73,18 @@ export default {
         // when app is running as standalone on ios & android
         isDekstop()
           ? await firebase.auth().signInWithPopup(provider)
-          : await firebase.auth().signInWithRedirect(provider)
+          : await firebase.auth().signInWithRedirect(provider);
       } catch (err) {
-        this.loginError = err
-        this.setUser(null)
+        this.loginError = err;
+        this.setUser(null);
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import '@/theme/variables.scss';
+@import "@/theme/variables.scss";
 
 .page-wrapper {
   display: flex;
