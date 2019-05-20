@@ -46,7 +46,7 @@
   .close:after {
     position: absolute;
     left: 8px;
-    content: " ";
+    content: ' ';
     height: 22px;
     width: 2px;
     background-color: #333;

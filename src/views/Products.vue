@@ -13,12 +13,12 @@ import AddProduct from "@/components/AddProduct";
 
 export default {
   components: { ProductList, AddProduct },
-  computed: mapState("app", ["networkOnLine"])
-};
+  computed: mapState('app', ["networkOnLine"])
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/theme/variables.scss";
+@import '@/theme/variables.scss';
 
 .products-page-title {
   text-align: center;
